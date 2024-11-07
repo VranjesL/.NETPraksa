@@ -37,8 +37,7 @@ namespace LibraryManagement.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {   
-            if(!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if(!ModelState.IsValid) return BadRequest(ModelState);
 
             var book = await _bookRepo.GetBookByIdAsync(id);
 
@@ -50,8 +49,7 @@ namespace LibraryManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateBookRequestDto bookDto)
         {
-            if(!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if(!ModelState.IsValid) return BadRequest(ModelState);
 
             var bookModel = bookDto.ToBookFromCreateDto();
             
@@ -64,14 +62,26 @@ namespace LibraryManagement.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            if(!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if(!ModelState.IsValid) return BadRequest(ModelState);
             
             var bookModel = await _bookRepo.DeleteBookAsync(id);
 
             if(bookModel == null) return NotFound();
 
             return NoContent();
+        }
+
+        [HttpPut]
+        [Route("{id:int}")]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateBookRequestDto bookDto)
+        {
+            if(!ModelState.IsValid) return BadRequest(ModelState);
+
+            var bookModel = await _bookRepo.UpdateBookAsync(id, bookDto);
+
+            if(bookModel == null) return NotFound();
+
+            return Ok(bookModel.ToBookDto());
         }
     }
 }

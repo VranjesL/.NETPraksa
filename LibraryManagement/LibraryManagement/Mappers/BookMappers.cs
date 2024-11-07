@@ -19,8 +19,8 @@ namespace LibraryManagement.Mappers
                 PublicationDate = bookModel.PublicationDate,
                 ISBN = bookModel.ISBN,
                 Status = bookModel.Status,
-                Author = bookModel.Author,
-                AuthorId = bookModel.AuthorId
+                AuthorFirstName = bookModel.Author?.FirstName,
+                AuthorLastName = bookModel.Author?.LastName
             };
         }
 
@@ -32,8 +32,24 @@ namespace LibraryManagement.Mappers
                 PublicationDate = bookDto.PublicationDate,
                 ISBN = bookDto.ISBN,
                 Status = bookDto.Status,
-                Author = bookDto.Author
+                Author = new Author
+                {
+                    FirstName = bookDto.AuthorFirstName,
+                    LastName = bookDto.AuthorLastName
+                }
+                //AuthorId = bookDto.AuthorId
             };
         }
+
+        /*public static Book ToBookFromUpdateDto(this UpdateBookRequestDto bookDto)
+        {
+            return new Book
+            {
+                BookName = bookDto.BookName,
+                PublicationDate = bookDto.PublicationDate,
+                ISBN = bookDto.ISBN,
+                Status = bookDto.Status,
+            };
+        }*/
     }
 }

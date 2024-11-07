@@ -6,7 +6,7 @@ using LibraryManagement.Models;
 
 namespace LibraryManagement.DTOs
 {
-    public class CreateBookRequestDto
+    public class UpdateBookRequestDto
     {
         public string BookName { get; set; } = string.Empty;
         public DateTime PublicationDate { get; set; }
@@ -14,8 +14,8 @@ namespace LibraryManagement.DTOs
         public string ISBN { get; set; } = string.Empty;
         // default status is available
         public string Status { get; set; } = "Available";
-        //public int AuthorId { get; set; }
         public string AuthorFirstName { get; set; } = string.Empty;
         public string AuthorLastName { get; set; } = string.Empty;
+        public DateTime AuthorBirthOfDate { get; set; }
     }
 }

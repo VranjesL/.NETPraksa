@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LibraryManagement.Data;
+using LibraryManagement.DTOs;
 using LibraryManagement.Interfaces;
 using LibraryManagement.Mappers;
 using LibraryManagement.Models;
@@ -39,26 +40,36 @@ namespace LibraryManagement.Repository
 
         public async Task<List<Book>> GetAllBooksAsync()
         {
-            return await _context.Books.ToListAsync();
+            return await _context.Books.Include(b => b.Author).ToListAsync();
         }
 
         public async Task<Book?> GetBookByIdAsync(int id)
         {
-            var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == id);
-
-            if (book == null) return null;
-
-            return book;
-        }
-
-        public Task<Book> UpdateBookAsync(int id)
-        {
-            throw new NotImplementedException();
+            return await _context.Books.Include(b => b.Author).FirstOrDefaultAsync(b => b.Id == id);
         }
 
         public Task<bool> BookExists(int id)
         {
             return _context.Books.AnyAsync(b => b.Id == id);
+        }
+
+        public async Task<Book> UpdateBookAsync(int id, UpdateBookRequestDto bookDto)
+        {
+            var existingBook = await _context.Books.Include(b => b.Author).FirstOrDefaultAsync(b => b.Id == id);
+
+            if(existingBook == null) return null;
+
+            existingBook.BookName = bookDto.BookName;
+            existingBook.PublicationDate = bookDto.PublicationDate;
+            existingBook.ISBN = bookDto.ISBN;
+            existingBook.Status = bookDto.Status;
+            existingBook.Author.FirstName = bookDto.AuthorFirstName;
+            existingBook.Author.LastName = bookDto.AuthorLastName;
+            existingBook.Author.BirthOfDate = bookDto.AuthorBirthOfDate;
+
+            await _context.SaveChangesAsync();
+
+            return existingBook;
         }
     }
 }
