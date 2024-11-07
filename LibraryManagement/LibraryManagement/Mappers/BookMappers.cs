@@ -20,11 +20,12 @@ namespace LibraryManagement.Mappers
                 ISBN = bookModel.ISBN,
                 Status = bookModel.Status,
                 AuthorFirstName = bookModel.Author?.FirstName,
-                AuthorLastName = bookModel.Author?.LastName
+                AuthorLastName = bookModel.Author?.LastName,
+                AuthorId = bookModel.AuthorId
             };
         }
 
-        public static Book ToBookFromCreateDto(this CreateBookRequestDto bookDto)
+        public static Book ToBookFromCreateDto(this CreateBookRequestDto bookDto, int authorId)
         {
             return new Book
             {
@@ -32,24 +33,15 @@ namespace LibraryManagement.Mappers
                 PublicationDate = bookDto.PublicationDate,
                 ISBN = bookDto.ISBN,
                 Status = bookDto.Status,
-                Author = new Author
+                AuthorId = authorId
+                /*Author = new Author
                 {
                     FirstName = bookDto.AuthorFirstName,
                     LastName = bookDto.AuthorLastName
-                }
+                }*/
                 //AuthorId = bookDto.AuthorId
             };
         }
 
-        /*public static Book ToBookFromUpdateDto(this UpdateBookRequestDto bookDto)
-        {
-            return new Book
-            {
-                BookName = bookDto.BookName,
-                PublicationDate = bookDto.PublicationDate,
-                ISBN = bookDto.ISBN,
-                Status = bookDto.Status,
-            };
-        }*/
     }
 }

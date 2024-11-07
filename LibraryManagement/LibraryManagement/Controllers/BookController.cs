@@ -17,10 +17,12 @@ namespace LibraryManagement.Controllers
     {   
         private readonly ApplicationDBContext _context;
         private readonly IBookRepository _bookRepo;
-        public BookController(ApplicationDBContext context, IBookRepository bookRepo)
+        private readonly IAuthorRepository _authorRepo;
+        public BookController(ApplicationDBContext context, IBookRepository bookRepo, IAuthorRepository authorRepo)
         {
             _context = context;
             _bookRepo = bookRepo;
+            _authorRepo = authorRepo;
         }
 
         [HttpGet]
@@ -46,16 +48,18 @@ namespace LibraryManagement.Controllers
             return Ok(book.ToBookDto());
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateBookRequestDto bookDto)
+        [HttpPost("{authorId}")]
+        public async Task<IActionResult> Create([FromRoute] int authorId, [FromBody] CreateBookRequestDto bookDto)
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);
 
-            var bookModel = bookDto.ToBookFromCreateDto();
+            if(!await _authorRepo.AuthorExists(authorId)) return BadRequest("Author does not exist");
+
+            var bookModel = bookDto.ToBookFromCreateDto(authorId);
             
             await _bookRepo.CreateBookAsync(bookModel);
 
-            return CreatedAtAction(nameof(GetById), new { id = bookModel.Id, authorId = bookModel.AuthorId }, bookModel.ToBookDto());
+            return CreatedAtAction(nameof(GetById), new { id = bookModel.Id }, bookModel.ToBookDto());
         }
 
         [HttpDelete]

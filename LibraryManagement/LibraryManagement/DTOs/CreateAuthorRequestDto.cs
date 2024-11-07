@@ -5,13 +5,10 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement.DTOs
 {
-    public class AuthorDto
-    {   
-        public int Id { get; set; }
+    public class CreateAuthorRequestDto
+    {
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime BirthOfDate { get; set; }
-        public List<BookDto> Books { get; set; }
-
     }
 }

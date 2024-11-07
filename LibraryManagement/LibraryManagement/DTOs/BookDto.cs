@@ -17,5 +17,6 @@ namespace LibraryManagement.DTOs
         public string Status { get; set; } = "Available";
         public string AuthorFirstName { get; set; } = string.Empty;
         public string AuthorLastName { get; set; } = string.Empty;
+        public int AuthorId { get; set; }
     }
 }

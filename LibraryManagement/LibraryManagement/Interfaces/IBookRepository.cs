@@ -14,6 +14,5 @@ namespace LibraryManagement.Interfaces
         Task<Book> CreateBookAsync(Book bookModel);
         Task<Book> UpdateBookAsync(int id, UpdateBookRequestDto bookDto);
         Task<Book?> DeleteBookAsync(int id);
-        Task<bool> BookExists(int id);
     }
 }
