@@ -22,7 +22,9 @@ namespace LibraryManagement.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
-        {
+        {   
+            if(!ModelState.IsValid) return BadRequest(ModelState);
+
             var authors = await _authorRepo.GetAllAuthorsAsync();
 
             var authorDto = authors.Select(a => a.ToAuthorDto());
@@ -33,7 +35,9 @@ namespace LibraryManagement.Controllers
         [HttpGet]
         [Route("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
-        {
+        {   
+            if(!ModelState.IsValid) return BadRequest(ModelState);
+
             var author = await _authorRepo.GetByIdAsync(id);
 
             if (author == null) return NotFound();
@@ -43,7 +47,9 @@ namespace LibraryManagement.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateAuthorRequestDto authorDto)
-        {
+        {   
+            if(!ModelState.IsValid) return BadRequest(ModelState);
+
             var author = authorDto.ToAuthorFromCreateDto();
             await _authorRepo.CreateAuthorAsync(author);
 
@@ -66,7 +72,9 @@ namespace LibraryManagement.Controllers
         [HttpPut]
         [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, UpdateAuthorRequestDto authorDto)
-        {
+        {   
+            if(!ModelState.IsValid) return BadRequest(ModelState);
+
             var author = await _authorRepo.UpdateAuthorAsync(id, authorDto);
 
             if(author == null) return NotFound();

@@ -28,7 +28,9 @@ namespace LibraryManagement.Controllers
         [HttpGet]
         //[Authorize]
         public async Task<IActionResult> GetAll()
-        {
+        {   
+            if(!ModelState.IsValid) return BadRequest(ModelState);
+
             var books = await _bookRepo.GetAllBooksAsync();
             
             var bookDto = books.Select(s => s.ToBookDto()).ToList();
@@ -48,7 +50,7 @@ namespace LibraryManagement.Controllers
             return Ok(book.ToBookDto());
         }
 
-        [HttpPost("{authorId}")]
+        [HttpPost("{authorId:int}")]
         public async Task<IActionResult> Create([FromRoute] int authorId, [FromBody] CreateBookRequestDto bookDto)
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);
