@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LibraryManagement.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,9 +22,30 @@ namespace LibraryManagement.Data
         public DbSet<Author> Authors { get; set; }
         public DbSet<BookRental> BookRentals { get; set; }
 
+        // adding admin and user roles
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            List<IdentityRole> roles = new List<IdentityRole>
+            {   
+                // creating the roles
+                new IdentityRole
+                {
+                    Name = "Admin",
+                    NormalizedName = "ADMIN"
+                },
+
+                new IdentityRole
+                {
+                    Name = "User",
+                    NormalizedName = "USER"
+                }
+            };
+
+            // adding the roles
+            builder.Entity<IdentityRole>().HasData(roles);
+            
 
             // username has to be unique
             /*builder.Entity<Member>()
