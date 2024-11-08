@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LibraryManagement.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagement.Data
 {
-    public class ApplicationDBContext : DbContext
+    public class ApplicationDBContext : IdentityDbContext<Member>
     {
         public ApplicationDBContext(DbContextOptions dbContextOptions)
         : base(dbContextOptions)
@@ -25,9 +26,9 @@ namespace LibraryManagement.Data
             base.OnModelCreating(builder);
 
             // username has to be unique
-            builder.Entity<Member>()
+            /*builder.Entity<Member>()
                 .HasIndex(m => m.Username)
-                .IsUnique();
+                .IsUnique();*/
             
             // ISBN has to be unique
             builder.Entity<Book>()

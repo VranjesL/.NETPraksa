@@ -9,7 +9,9 @@ namespace LibraryManagement.Models
     {
         public int Id { get; set; }
 
-        public int MemberId { get; set; }
+        /* string zato sto u modelu member nasledjujemo
+           identity koji ima ugradjen string Id */
+        public string MemberId { get; set; }
         public Member Member { get; set; }
 
         public int BookId { get; set; }
