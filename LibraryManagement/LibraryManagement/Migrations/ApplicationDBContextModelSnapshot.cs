@@ -84,18 +84,17 @@ namespace LibraryManagement.Migrations
 
             modelBuilder.Entity("LibraryManagement.Models.BookRental", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("MemberId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
-                    b.Property<string>("MemberId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("RentalDate")
                         .HasColumnType("datetime2");
@@ -103,12 +102,12 @@ namespace LibraryManagement.Migrations
                     b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.HasKey("MemberId", "BookId");
+
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("BookId")
                         .IsUnique();
-
-                    b.HasIndex("MemberId");
 
                     b.ToTable("BookRentals");
                 });
@@ -222,13 +221,13 @@ namespace LibraryManagement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "79845e8f-080e-45b2-9caa-03f6e0fd2b0b",
+                            Id = "24afb922-11f3-40a5-b4a6-629e8d3b38ee",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "67a15c8b-cb82-47e3-98d2-844f4f2e74a7",
+                            Id = "d5c71e29-21d3-4915-a415-841057eeaa33",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -353,6 +352,10 @@ namespace LibraryManagement.Migrations
 
             modelBuilder.Entity("LibraryManagement.Models.BookRental", b =>
                 {
+                    b.HasOne("LibraryManagement.Models.Author", null)
+                        .WithMany("BookRentals")
+                        .HasForeignKey("AuthorId");
+
                     b.HasOne("LibraryManagement.Models.Book", "Book")
                         .WithOne("BookRental")
                         .HasForeignKey("LibraryManagement.Models.BookRental", "BookId")
@@ -423,6 +426,8 @@ namespace LibraryManagement.Migrations
 
             modelBuilder.Entity("LibraryManagement.Models.Author", b =>
                 {
+                    b.Navigation("BookRentals");
+
                     b.Navigation("Books");
                 });
 

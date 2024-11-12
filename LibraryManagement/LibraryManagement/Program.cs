@@ -95,6 +95,7 @@ builder.Services.AddAuthentication(options => {
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IBookRentalRepository, BookRentalRepository>();
 
 var app = builder.Build();
 

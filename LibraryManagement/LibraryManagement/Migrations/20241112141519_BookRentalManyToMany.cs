@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace LibraryManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class BookRentalManyToMany : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -202,16 +204,16 @@ namespace LibraryManagement.Migrations
                 name: "BookRentals",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     MemberId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     BookId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     RentalDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AuthorId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookRentals", x => x.Id);
+                    table.PrimaryKey("PK_BookRentals", x => new { x.MemberId, x.BookId });
                     table.ForeignKey(
                         name: "FK_BookRentals_AspNetUsers_MemberId",
                         column: x => x.MemberId,
@@ -219,11 +221,25 @@ namespace LibraryManagement.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_BookRentals_Authors_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "Authors",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_BookRentals_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "24afb922-11f3-40a5-b4a6-629e8d3b38ee", null, "Admin", "ADMIN" },
+                    { "d5c71e29-21d3-4915-a415-841057eeaa33", null, "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -266,15 +282,15 @@ namespace LibraryManagement.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BookRentals_AuthorId",
+                table: "BookRentals",
+                column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BookRentals_BookId",
                 table: "BookRentals",
                 column: "BookId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BookRentals_MemberId",
-                table: "BookRentals",
-                column: "MemberId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Books_AuthorId",

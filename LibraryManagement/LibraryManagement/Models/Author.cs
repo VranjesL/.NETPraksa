@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace LibraryManagement.Models
-{
+{   
+    [Table("Authors")]
     public class Author
     {   
         public int Id { get; set; }
@@ -13,6 +15,7 @@ namespace LibraryManagement.Models
         public DateTime BirthOfDate { get; set; }
         
         // list of books that author has written
-        public List<Book> Books { get; set; }
+        public List<Book> Books { get; set; } = new List<Book>();
+        public List<BookRental> BookRentals { get; set; } = new List<BookRental>();
     }
 }

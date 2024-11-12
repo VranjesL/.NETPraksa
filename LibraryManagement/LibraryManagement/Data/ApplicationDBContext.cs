@@ -27,6 +27,8 @@ namespace LibraryManagement.Data
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<BookRental>(x => x.HasKey(p => new { p.MemberId, p.BookId }));
+
             List<IdentityRole> roles = new List<IdentityRole>
             {   
                 // creating the roles
