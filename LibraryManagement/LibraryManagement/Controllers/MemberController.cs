@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LibraryManagement.DTOs;
+using LibraryManagement.Interfaces;
 using LibraryManagement.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagement.Controllers
 {   
@@ -14,9 +16,37 @@ namespace LibraryManagement.Controllers
     public class MemberController : ControllerBase
     {   
         private readonly UserManager<Member> _memberManager;
-        public MemberController(UserManager<Member> memberManager)
+        private readonly ITokenService _tokenService;
+        private readonly SignInManager<Member> _signInManager;
+        public MemberController(UserManager<Member> memberManager, ITokenService tokenService, SignInManager<Member> signInManager)
         {
             _memberManager = memberManager;
+            _tokenService = tokenService;
+            _signInManager = signInManager;
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginDto loginDto)
+        {
+            if(!ModelState.IsValid) return BadRequest(ModelState);
+
+            var member = await _memberManager.Users.FirstOrDefaultAsync(m => m.UserName == loginDto.Username.ToLower());
+
+            if(member == null) return Unauthorized("Invalid username!");
+
+            var result = await _signInManager.CheckPasswordSignInAsync(member, loginDto.Password, false);
+
+            if(!result.Succeeded) return Unauthorized("Username not found and/or password incorrect!");
+
+            return Ok(
+                new NewMemberDto
+                {
+                    UserName = member.UserName,
+                    FirstName = member.FirstName,
+                    LastName = member.LastName,
+                    Token = _tokenService.CreateToken(member)
+                }
+            );
         }
 
         [HttpPost("register")]
@@ -42,7 +72,18 @@ namespace LibraryManagement.Controllers
                     // similar to createasync but its for roles
                     var roleResult = await _memberManager.AddToRoleAsync(member, "User");
                     if(roleResult.Succeeded)
-                        return Ok("Member created!");
+                    {
+                        return Ok(
+                            new NewMemberDto
+                            {
+                                UserName = member.UserName,
+                                FirstName = member.FirstName,
+                                LastName = member.LastName,
+                                Token = _tokenService.CreateToken(member)
+                            }
+                        );
+                    }
+                        
                     else
                         return StatusCode(500, roleResult.Errors);
                 }
