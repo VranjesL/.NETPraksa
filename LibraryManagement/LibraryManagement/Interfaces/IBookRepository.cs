@@ -11,6 +11,7 @@ namespace LibraryManagement.Interfaces
     {
         Task<List<Book>> GetAllBooksAsync();
         Task<Book?> GetBookByIdAsync(int id);
+        Task<Book?> GetBookByName(string bookName);
         Task<Book> CreateBookAsync(Book bookModel);
         Task<Book> UpdateBookAsync(int id, UpdateBookRequestDto bookDto);
         Task<Book?> DeleteBookAsync(int id);

@@ -48,6 +48,11 @@ namespace LibraryManagement.Repository
             return await _context.Books.Include(b => b.Author).FirstOrDefaultAsync(b => b.Id == id);
         }
 
+        public async Task<Book?> GetBookByName(string bookName)
+        {
+            return await _context.Books.Include(b => b.Author).FirstOrDefaultAsync(b => b.BookName == bookName);
+        }
+
         public async Task<Book> UpdateBookAsync(int id, UpdateBookRequestDto bookDto)
         {
             var existingBook = await _context.Books.Include(b => b.Author).FirstOrDefaultAsync(b => b.Id == id);

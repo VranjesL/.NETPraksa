@@ -16,6 +16,5 @@ namespace LibraryManagement.Models
         
         // list of books that author has written
         public List<Book> Books { get; set; } = new List<Book>();
-        public List<BookRental> BookRentals { get; set; } = new List<BookRental>();
     }
 }
