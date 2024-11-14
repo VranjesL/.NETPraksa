@@ -29,24 +29,17 @@ namespace LibraryManagement.Controllers
             _bookRentalRepo = bookRentalRepo;
         }
 
-        /*[HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetMemberPortfolio()
-        {   
-            // user is being inheritated from controller base
-            var username = User.GetUsername();
-            var member = await _userManager.FindByNameAsync(username);
-            var memberPortfolio = await _bookRentalRepo.GetMemberPortfolio(member);
-            return Ok(memberPortfolio);
-        }*/
-
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> BorrowBook(string bookName)
         {
-            var username = User.GetUsername();
+            var username = User.Identity?.Name;
+
+            if(string.IsNullOrEmpty(username)) return BadRequest("Username not found!");
             
-            var member = await _userManager.FindByNameAsync(username);
+            var member = await _bookRentalRepo.FindMemberByUsername(username);
+
+            if(member == null) return BadRequest("Member not found!");
 
             var book = await _bookRepo.GetBookByName(bookName);
 
@@ -82,7 +75,6 @@ namespace LibraryManagement.Controllers
             };
 
             bookRentalModel.ReturnDate = null;
-            bookRentalModel.RentalDate = DateTime.UtcNow;
 
             await _bookRepo.UpdateBookAsync(book.Id, updateBookDto);
             await _bookRentalRepo.CreateAsync(bookRentalModel);
@@ -101,8 +93,13 @@ namespace LibraryManagement.Controllers
         [Authorize]
         public async Task<IActionResult> ReturnBook(string bookName)
         {   
-            var username = User.GetUsername();
-            var member = await _userManager.FindByNameAsync(username);
+            var username = User.Identity?.Name;
+
+            if(string.IsNullOrEmpty(username)) return BadRequest("Username not found!");
+            
+            var member = await _bookRentalRepo.FindMemberByUsername(username);
+
+            if(member == null) return BadRequest("Member not found!");
 
             // getting portfolio of member that is currently logged in
             var memberPortfolio = await _bookRentalRepo.GetMemberPortfolio(member);

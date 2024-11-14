@@ -14,5 +14,7 @@ namespace LibraryManagement.Interfaces
         //Task<Book> BorrowBookAsync(int bookId, string memberId);
         //Task<Book> ReturnBookAsync(int bookId, string memberId);
         Task<BookRental> GetBookRentalByBookName(Member member, string bookName);
+        //Task<BookRental> BorrowBook()
+        Task<Member> FindMemberByUsername(string username);
     }
 }

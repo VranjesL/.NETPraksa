@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LibraryManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class BookRentalManyToMany : Migration
+    public partial class FinalDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,8 +34,6 @@ namespace LibraryManagement.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -207,9 +205,8 @@ namespace LibraryManagement.Migrations
                     MemberId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     BookId = table.Column<int>(type: "int", nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false),
-                    RentalDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    AuthorId = table.Column<int>(type: "int", nullable: true)
+                    RentalDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -220,11 +217,6 @@ namespace LibraryManagement.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BookRentals_Authors_AuthorId",
-                        column: x => x.AuthorId,
-                        principalTable: "Authors",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_BookRentals_Books_BookId",
                         column: x => x.BookId,
@@ -238,8 +230,8 @@ namespace LibraryManagement.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "24afb922-11f3-40a5-b4a6-629e8d3b38ee", null, "Admin", "ADMIN" },
-                    { "d5c71e29-21d3-4915-a415-841057eeaa33", null, "User", "USER" }
+                    { "2603ee69-6a91-4f6d-ae65-cee3f79fbe5e", null, "Admin", "ADMIN" },
+                    { "81cf09cf-c868-4c9c-b455-d2591c2d7d4b", null, "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -280,11 +272,6 @@ namespace LibraryManagement.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BookRentals_AuthorId",
-                table: "BookRentals",
-                column: "AuthorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookRentals_BookId",

@@ -26,7 +26,7 @@ namespace LibraryManagement.Controllers
         }
 
         [HttpGet]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {   
             if(!ModelState.IsValid) return BadRequest(ModelState);
@@ -39,6 +39,7 @@ namespace LibraryManagement.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {   
             if(!ModelState.IsValid) return BadRequest(ModelState);
@@ -51,6 +52,7 @@ namespace LibraryManagement.Controllers
         }
 
         [HttpPost("{authorId:int}")]
+        [Authorize]
         public async Task<IActionResult> Create([FromRoute] int authorId, [FromBody] CreateBookRequestDto bookDto)
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);
@@ -66,6 +68,7 @@ namespace LibraryManagement.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);
@@ -79,6 +82,7 @@ namespace LibraryManagement.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateBookRequestDto bookDto)
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);

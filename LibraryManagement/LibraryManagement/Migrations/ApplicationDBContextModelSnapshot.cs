@@ -90,21 +90,16 @@ namespace LibraryManagement.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AuthorId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("RentalDate")
+                    b.Property<DateTime?>("RentalDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("MemberId", "BookId");
-
-                    b.HasIndex("AuthorId");
 
                     b.HasIndex("BookId")
                         .IsUnique();
@@ -123,9 +118,6 @@ namespace LibraryManagement.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -155,10 +147,6 @@ namespace LibraryManagement.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -221,13 +209,13 @@ namespace LibraryManagement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "24afb922-11f3-40a5-b4a6-629e8d3b38ee",
+                            Id = "2603ee69-6a91-4f6d-ae65-cee3f79fbe5e",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "d5c71e29-21d3-4915-a415-841057eeaa33",
+                            Id = "81cf09cf-c868-4c9c-b455-d2591c2d7d4b",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -352,10 +340,6 @@ namespace LibraryManagement.Migrations
 
             modelBuilder.Entity("LibraryManagement.Models.BookRental", b =>
                 {
-                    b.HasOne("LibraryManagement.Models.Author", null)
-                        .WithMany("BookRentals")
-                        .HasForeignKey("AuthorId");
-
                     b.HasOne("LibraryManagement.Models.Book", "Book")
                         .WithOne("BookRental")
                         .HasForeignKey("LibraryManagement.Models.BookRental", "BookId")
@@ -426,8 +410,6 @@ namespace LibraryManagement.Migrations
 
             modelBuilder.Entity("LibraryManagement.Models.Author", b =>
                 {
-                    b.Navigation("BookRentals");
-
                     b.Navigation("Books");
                 });
 

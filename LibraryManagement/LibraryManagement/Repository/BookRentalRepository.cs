@@ -18,54 +18,6 @@ namespace LibraryManagement.Repository
             _context = context;
         }
 
-        /*public async Task<Book> BorrowBookAsync(int bookId, string memberId)
-        {
-            var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == bookId);
-
-            if(book == null || book.Status != "Available") return null;
-
-            var borrowedBooks = await _context.BookRentals
-                .Where(br => br.MemberId == memberId && !br.isReturned).CountAsync();
-
-            if(borrowedBooks >= 5) return null;
-
-            var bookRental = new BookRental
-            {
-                BookId = bookId,
-                MemberId = memberId,
-                RentalDate = DateTime.UtcNow
-            };
-            
-            book.Status = "Rented";
-
-            await _context.BookRentals.AddAsync(bookRental);
-            _context.Books.Update(book);
-            await _context.SaveChangesAsync();
-
-            return book;
-        }
-
-        public async Task<Book> ReturnBookAsync(int bookId, string memberId)
-        {
-            var bookRental = await _context.BookRentals.FirstOrDefaultAsync(br => br.BookId == bookId && br.MemberId == memberId && !br.isReturned);
-
-            if(bookRental == null) return null;
-
-            if(bookRental.RentalDate.AddDays(15) < DateTime.UtcNow) throw new InvalidOperationException("The book is overdue and should be returned.");
-
-            bookRental.ReturnDate = DateTime.UtcNow;
-
-            var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == bookId);
-            book.Status = "Available";
-
-            _context.BookRentals.Update(bookRental);
-            _context.Books.Update(book);
-            await _context.SaveChangesAsync();
-            return book;
-        }*/
-
-
-
         public async Task<BookRental> CreateAsync(BookRental bookRental)
         {   
             var existingRental = await _context.BookRentals
@@ -87,14 +39,19 @@ namespace LibraryManagement.Repository
         }
 
         public async Task<List<Book>> GetMemberPortfolio(Member member)
-        {
-            return await _context.BookRentals.Where(m => m.MemberId == member.Id).Select(book => new Book
+        {   
+            if (member == null)
             {
-                Id = book.BookId,
-                BookName = book.Book.BookName,
-                PublicationDate = book.Book.PublicationDate,
-                ISBN = book.Book.ISBN,
-                Status = book.Book.Status
+                throw new ArgumentNullException(nameof(member), "Member cannot be null.");
+            }   
+
+            return await _context.BookRentals.Include(br => br.Book).Where(br => br.MemberId == member.Id).Select(br => new Book
+            {
+                Id = br.BookId,
+                BookName = br.Book.BookName,
+                PublicationDate = br.Book.PublicationDate,
+                ISBN = br.Book.ISBN,
+                Status = br.Book.Status
             }).ToListAsync();
         }
 
@@ -111,6 +68,15 @@ namespace LibraryManagement.Repository
             await _context.SaveChangesAsync();
 
             return bookRentalModel;
+        }
+
+        public async Task<Member> FindMemberByUsername(string username)
+        {
+            var member =  await _context.Members.FirstOrDefaultAsync(m => m.UserName == username);
+        
+            if(member == null) return null;
+
+            return member;
         }
     }
 }
