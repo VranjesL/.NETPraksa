@@ -20,6 +20,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// settings so we can authorize tokens directly from swagger 
 builder.Services.AddSwaggerGen(option =>
 {
     option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
@@ -49,17 +50,19 @@ builder.Services.AddSwaggerGen(option =>
 });
 
 // learn more about this
+// newtonsoft.json is popular library for handling JSON objects
 // reason that we are doing this is to prevent object cycles, part of ef
 builder.Services.AddControllers().AddNewtonsoftJson(options => 
-{
+{   
     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 });
 
 builder.Services.AddDbContext<ApplicationDBContext>(options => {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-    options.EnableSensitiveDataLogging();
+    //options.EnableSensitiveDataLogging();
 });
 
+// setting requirements for password
 builder.Services.AddIdentity<Member, IdentityRole>(options =>{
     options.Password.RequireDigit = true;
     options.Password.RequiredLength = 8;

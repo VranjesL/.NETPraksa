@@ -31,25 +31,24 @@ namespace LibraryManagement.Controllers
 
         [HttpPost]
         [Authorize]
+        // this function needs refactoring
         public async Task<IActionResult> BorrowBook(string bookName)
         {
             var username = User.Identity?.Name;
-
             if(string.IsNullOrEmpty(username)) return BadRequest("Username not found!");
             
             var member = await _bookRentalRepo.FindMemberByUsername(username);
-
             if(member == null) return BadRequest("Member not found!");
 
             var book = await _bookRepo.GetBookByName(bookName);
-
             if(book == null) return BadRequest("Book not found!");
+
             if(book.Status != "Available") return BadRequest("Book is already rented!");
 
             var memberPortfolio = await _bookRentalRepo.GetMemberPortfolio(member);
             if(memberPortfolio.Count >= 5) return BadRequest("You cannot borrow more than 5 books at a time!");
 
-            if(memberPortfolio.Any(e => e.BookName.ToLower() == bookName.ToLower() && e.Status == "Rented")) return BadRequest("Cannot borrow the same book, it is already rented by you");
+            if(memberPortfolio.Any(e => e.BookName.ToLower() == bookName.ToLower())) return BadRequest("Cannot borrow the same book");
 
             var bookRentalModel = new BookRental
             {

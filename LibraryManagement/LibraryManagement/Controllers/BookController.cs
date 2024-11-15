@@ -15,12 +15,10 @@ namespace LibraryManagement.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {   
-        private readonly ApplicationDBContext _context;
         private readonly IBookRepository _bookRepo;
         private readonly IAuthorRepository _authorRepo;
-        public BookController(ApplicationDBContext context, IBookRepository bookRepo, IAuthorRepository authorRepo)
+        public BookController(IBookRepository bookRepo, IAuthorRepository authorRepo)
         {
-            _context = context;
             _bookRepo = bookRepo;
             _authorRepo = authorRepo;
         }

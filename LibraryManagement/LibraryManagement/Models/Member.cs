@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace LibraryManagement.Models
 {   
+    // don't have to have username/passwrod fields because we inherit it from identityUser
     public class Member : IdentityUser
     {   
         public string FirstName { get; set; } = string.Empty;
