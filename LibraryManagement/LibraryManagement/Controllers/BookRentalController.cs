@@ -70,7 +70,8 @@ namespace LibraryManagement.Controllers
                 Status = "Rented",
                 AuthorFirstName = book.Author.FirstName,
                 AuthorLastName = book.Author.LastName,
-                AuthorBirthOfDate = book.Author.BirthOfDate
+                AuthorBirthOfDate = book.Author.BirthOfDate,
+                TimesRented = book.TimesRented++ 
             };
 
             bookRentalModel.ReturnDate = null;

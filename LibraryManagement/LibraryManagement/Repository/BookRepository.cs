@@ -53,6 +53,17 @@ namespace LibraryManagement.Repository
             return await _context.Books.Include(b => b.Author).FirstOrDefaultAsync(b => b.BookName == bookName);
         }
 
+        public async Task<List<BookTimesRentedDto>> GetMostRentedBooksAsync(int noBooksToShow)
+        {
+            return await _context.Books.OrderByDescending(b => b.TimesRented).Take(noBooksToShow).Select(b => new BookTimesRentedDto {
+                Id = b.Id,
+                BookName = b.BookName,
+                AuthorFirstName = b.Author.FirstName,
+                AuthorLastName = b.Author.LastName,
+                TimesRented = b.TimesRented
+            }).ToListAsync();
+        }
+
         public async Task<Book> UpdateBookAsync(int id, UpdateBookRequestDto bookDto)
         {
             var existingBook = await _context.Books.Include(b => b.Author).FirstOrDefaultAsync(b => b.Id == id);

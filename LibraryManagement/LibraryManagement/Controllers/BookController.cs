@@ -91,5 +91,15 @@ namespace LibraryManagement.Controllers
 
             return Ok(bookModel.ToBookDto());
         }
+
+        [HttpGet("Most-Rented")]
+        public async Task<IActionResult> GetMostRentedBooks([FromQuery] int noBooksToShow = 5)
+        {   
+            if(!ModelState.IsValid) return BadRequest(ModelState);
+
+            var mostRentedBooks = await _bookRepo.GetMostRentedBooksAsync(noBooksToShow);
+
+            return Ok(mostRentedBooks);
+        }
     }
 }

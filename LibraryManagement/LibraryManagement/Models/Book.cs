@@ -16,6 +16,7 @@ namespace LibraryManagement.Models
         public string ISBN { get; set; } = string.Empty;
         // default status is available
         public string Status { get; set; } = "Available";
+        public int TimesRented { get; set; } = 0;
         public int AuthorId { get; set; }
         public Author Author { get; set; }
         public BookRental BookRental { get; set; }

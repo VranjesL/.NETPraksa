@@ -28,5 +28,6 @@ namespace LibraryManagement.DTOs
         public string AuthorLastName { get; set; } = string.Empty;
         [Required]
         public DateTime AuthorBirthOfDate { get; set; }
+        public int TimesRented { get; set; }
     }
 }
