@@ -75,6 +75,7 @@ namespace LibraryManagement.Controllers
             };
 
             bookRentalModel.ReturnDate = null;
+            member.TotalRentals += 1;
 
             await _bookRepo.UpdateBookAsync(book.Id, updateBookDto);
             await _bookRentalRepo.CreateAsync(bookRentalModel);

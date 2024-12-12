@@ -100,6 +100,7 @@ builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IBookRentalRepository, BookRentalRepository>();
+builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 
 var app = builder.Build();
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LibraryManagement.DTOs;
 using LibraryManagement.Interfaces;
+using LibraryManagement.Mappers;
 using LibraryManagement.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,11 +19,13 @@ namespace LibraryManagement.Controllers
         private readonly UserManager<Member> _memberManager;
         private readonly ITokenService _tokenService;
         private readonly SignInManager<Member> _signInManager;
-        public MemberController(UserManager<Member> memberManager, ITokenService tokenService, SignInManager<Member> signInManager)
+        private readonly IMemberRepository _memberRepo;
+        public MemberController(UserManager<Member> memberManager, ITokenService tokenService, SignInManager<Member> signInManager, IMemberRepository memberRepo)
         {
             _memberManager = memberManager;
             _tokenService = tokenService;
             _signInManager = signInManager;
+            _memberRepo = memberRepo;
         }
 
         [HttpPost("login")]
@@ -94,6 +97,17 @@ namespace LibraryManagement.Controllers
             {
                 return StatusCode(500, e);
             }
+        }
+
+        [HttpGet("Members with most books borrowed throughout history")]
+        public async Task<IActionResult> GetTopBorrowersAllTime([FromQuery] int top = 5)
+        {
+            var topBorrowers = await _memberRepo.TopBorrowersAllTimeAsync(top);
+
+            if (topBorrowers == null || !topBorrowers.Any()) return NotFound("No borrowers found.");
+            //var topBorrowersDto = topBorrowers.).ToList();
+
+            return Ok(topBorrowers);
         }
     }
 }
