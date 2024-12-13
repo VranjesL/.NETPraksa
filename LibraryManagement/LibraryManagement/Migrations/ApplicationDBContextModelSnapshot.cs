@@ -163,7 +163,10 @@ namespace LibraryManagement.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TotalRentals")
+                    b.Property<int>("TotalRentalsAllTime")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalRentalsNow")
                         .HasColumnType("int");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -215,13 +218,13 @@ namespace LibraryManagement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "98b56e1f-c48f-45bb-965c-ab578643e8c4",
+                            Id = "c91338a4-42f2-453d-adb5-8b9f32c8d838",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "a70a9700-828d-4c1e-861a-5f9d8398e84d",
+                            Id = "65b0859a-d053-47fe-a1ba-0e8ca4aa21bf",
                             Name = "User",
                             NormalizedName = "USER"
                         });

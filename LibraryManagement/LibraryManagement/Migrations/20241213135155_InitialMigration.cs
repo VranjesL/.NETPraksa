@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LibraryManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class FinalDatabase : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,6 +34,8 @@ namespace LibraryManagement.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TotalRentalsAllTime = table.Column<int>(type: "int", nullable: false),
+                    TotalRentalsNow = table.Column<int>(type: "int", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -185,6 +187,7 @@ namespace LibraryManagement.Migrations
                     PublicationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ISBN = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TimesRented = table.Column<int>(type: "int", nullable: false),
                     AuthorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -230,8 +233,8 @@ namespace LibraryManagement.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "2603ee69-6a91-4f6d-ae65-cee3f79fbe5e", null, "Admin", "ADMIN" },
-                    { "81cf09cf-c868-4c9c-b455-d2591c2d7d4b", null, "User", "USER" }
+                    { "65b0859a-d053-47fe-a1ba-0e8ca4aa21bf", null, "User", "USER" },
+                    { "c91338a4-42f2-453d-adb5-8b9f32c8d838", null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(

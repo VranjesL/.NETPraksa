@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryManagement.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20241210124918_AddTimesRentedToBook")]
-    partial class AddTimesRentedToBook
+    [Migration("20241213135155_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -166,6 +166,12 @@ namespace LibraryManagement.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TotalRentalsAllTime")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalRentalsNow")
+                        .HasColumnType("int");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -215,13 +221,13 @@ namespace LibraryManagement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "791c9948-8877-4585-a5ba-4e4d23005304",
+                            Id = "c91338a4-42f2-453d-adb5-8b9f32c8d838",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "55f14005-a573-4ce1-a68c-09885a2c4218",
+                            Id = "65b0859a-d053-47fe-a1ba-0e8ca4aa21bf",
                             Name = "User",
                             NormalizedName = "USER"
                         });

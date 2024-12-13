@@ -100,14 +100,14 @@ namespace LibraryManagement.Controllers
         }
 
         [HttpGet("Members with most books borrowed throughout history")]
-        public async Task<IActionResult> GetTopBorrowersAllTime([FromQuery] int top = 5)
+        public async Task<IActionResult> GetTopBorrowers([FromQuery] int top = 5, [FromQuery] bool showAllTime = true)
         {
-            var topBorrowers = await _memberRepo.TopBorrowersAllTimeAsync(top);
+            var topBorrowers = await _memberRepo.GetTopBorrowersAsync(top, showAllTime);
 
             if (topBorrowers == null || !topBorrowers.Any()) return NotFound("No borrowers found.");
-            //var topBorrowersDto = topBorrowers.).ToList();
 
             return Ok(topBorrowers);
         }
+
     }
 }

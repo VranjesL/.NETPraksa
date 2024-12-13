@@ -15,7 +15,8 @@ namespace LibraryManagement.Mappers
             {
                 FirstName = memberModel.FirstName,
                 LastName = memberModel.LastName,
-                TotalRentals = memberModel.TotalRentals
+                TotalRentalsAllTime = memberModel.TotalRentalsAllTime,
+                TotalRentalsNow = memberModel.TotalRentalsNow
             };
         }
     }

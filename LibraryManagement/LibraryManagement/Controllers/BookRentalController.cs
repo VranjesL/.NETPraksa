@@ -75,7 +75,8 @@ namespace LibraryManagement.Controllers
             };
 
             bookRentalModel.ReturnDate = null;
-            member.TotalRentals += 1;
+            member.TotalRentalsAllTime += 1;
+            member.TotalRentalsNow += 1;
 
             await _bookRepo.UpdateBookAsync(book.Id, updateBookDto);
             await _bookRentalRepo.CreateAsync(bookRentalModel);
@@ -127,6 +128,8 @@ namespace LibraryManagement.Controllers
                 AuthorLastName = book.Author.LastName,
                 AuthorBirthOfDate = book.Author.BirthOfDate
             };
+
+            member.TotalRentalsNow -= 1;
 
             await _bookRepo.UpdateBookAsync(book.Id, updateBookDto);
             await _bookRentalRepo.ReturnBook(member, bookName);

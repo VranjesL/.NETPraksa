@@ -9,7 +9,6 @@ namespace LibraryManagement.Interfaces
 {
     public interface IMemberRepository
     {
-        Task<List<MemberDto>> TopBorrowersAllTimeAsync(int top);
-        Task<List<Member>> TopBorrowersRightNowAsync(int top);
+        Task<List<MemberDto>> GetTopBorrowersAsync(int top, bool showAllTime);
     }
 }

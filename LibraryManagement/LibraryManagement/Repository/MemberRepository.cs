@@ -19,20 +19,25 @@ namespace LibraryManagement.Repository
         {
             _context = context;
         }
-        public async Task<List<MemberDto>> TopBorrowersAllTimeAsync(int top)
-        {
-            return await _context.Members.Select(m => new MemberDto
-            {
-                FirstName = m.FirstName,
-                LastName = m.LastName,
-                TotalRentals = m.TotalRentals,
-                Username = m.UserName
-            }).OrderByDescending(x => x.TotalRentals).Take(top).ToListAsync();
-        }
+        public async Task<List<MemberDto>> GetTopBorrowersAsync(int top, bool showAllTime)
+        {   
+            var topBorrowers = _context.Members.Select(m => new MemberDto
+                {
+                    FirstName = m.FirstName,
+                    LastName = m.LastName,
+                    TotalRentalsAllTime = m.TotalRentalsAllTime,
+                    TotalRentalsNow = m.TotalRentalsNow,
+                    Username = m.UserName
+                });
 
-        public Task<List<Member>> TopBorrowersRightNowAsync(int top)
-        {
-            throw new NotImplementedException();
+            if(showAllTime)
+            {
+               return await topBorrowers.OrderByDescending(x => x.TotalRentalsAllTime).Take(top).ToListAsync();
+            }
+            else
+            {
+                return await topBorrowers.OrderByDescending(x => x.TotalRentalsNow).Take(top).ToListAsync();
+            }
         }
     }
 }
