@@ -47,7 +47,7 @@ namespace LibraryManagement.Controllers
                     UserName = member.UserName,
                     FirstName = member.FirstName,
                     LastName = member.LastName,
-                    Token = _tokenService.CreateToken(member)
+                    Token = await _tokenService.CreateToken(member)
                 }
             );
         }
@@ -82,7 +82,7 @@ namespace LibraryManagement.Controllers
                                 UserName = member.UserName,
                                 FirstName = member.FirstName,
                                 LastName = member.LastName,
-                                Token = _tokenService.CreateToken(member)
+                                Token = await _tokenService.CreateToken(member)
                             }
                         );
                     }

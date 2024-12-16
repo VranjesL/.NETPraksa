@@ -93,7 +93,6 @@ namespace LibraryManagement.Repository
                                             .Where(br => br.Member.UserName == memberUsername)
                                             .Select(br => br.Book)
                                             .ToListAsync();
-
         }
     }
 }

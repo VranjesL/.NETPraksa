@@ -8,6 +8,6 @@ namespace LibraryManagement.Interfaces
 {
     public interface ITokenService
     {
-        string CreateToken(Member member);
+        Task<string> CreateToken(Member member);
     }
 }

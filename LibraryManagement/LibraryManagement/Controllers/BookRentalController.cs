@@ -149,8 +149,9 @@ namespace LibraryManagement.Controllers
         }
 
         [HttpGet("Rented books by member")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> GetBooksRentedByMember([FromQuery] string memberUsername)
-        {
+        {   
             var rentedBooks = await _bookRentalRepo.GetBooksRentedByMember(memberUsername);
 
             if(rentedBooks == null || !rentedBooks.Any()) return NotFound("No books have been rented by this member");

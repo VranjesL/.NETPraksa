@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LibraryManagement.Interfaces;
 using LibraryManagement.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 namespace LibraryManagement.Service
@@ -14,11 +15,13 @@ namespace LibraryManagement.Service
     public class TokenService : ITokenService
     {   
         // using iconfiguration so we can pull stuff from appsetting.json
+        private readonly UserManager<Member> _userManager;
         private readonly IConfiguration _config;
         // _key created from SigningKey value from appsetting.json
         private readonly SymmetricSecurityKey _key;
-        public TokenService(IConfiguration config)
-        {
+        public TokenService(IConfiguration config, UserManager<Member> userManager)
+        {   
+            _userManager = userManager;
             _config = config;
 
             //we have to turn it into bytes, not gonna accept regular string
@@ -26,7 +29,7 @@ namespace LibraryManagement.Service
         }
 
         // method that creates JWT for authentication
-        public string CreateToken(Member member)
+        public async Task<string> CreateToken(Member member)
         {
             var claims = new List<Claim>
             {
@@ -35,6 +38,11 @@ namespace LibraryManagement.Service
                 new Claim(JwtRegisteredClaimNames.FamilyName, member.LastName)
             };
 
+            var roles = await _userManager.GetRolesAsync(member);
+            foreach(var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
             // creating signing credentials, this part guarantees authenticity of token
             var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
             
