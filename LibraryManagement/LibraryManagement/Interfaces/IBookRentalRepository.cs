@@ -13,5 +13,7 @@ namespace LibraryManagement.Interfaces
         Task<BookRental> ReturnBook(Member member, string bookName);
         Task<BookRental> GetBookRentalByBookName(Member member, string bookName);
         Task<Member> FindMemberByUsername(string username);
+        Task<List<Book>> GetMostRentedBooksInLastXDays(int x);
+        Task<List<Book>> GetBooksRentedByMember(string memberUsername);
     }
 }

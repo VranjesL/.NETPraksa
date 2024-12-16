@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using LibraryManagement.Data;
 using LibraryManagement.Interfaces;
 using LibraryManagement.Models;
@@ -77,6 +78,22 @@ namespace LibraryManagement.Repository
             if(member == null) return null;
 
             return member;
+        }
+
+        public async Task<List<Book>> GetMostRentedBooksInLastXDays(int x)
+        {   
+            DateTime targetDate = DateTime.UtcNow.AddDays(-x);
+            return await _context.BookRentals.Include(b => b.Book).ThenInclude(b => b.Author).Where(b => b.RentalDate >= targetDate).Select(b => b.Book).ToListAsync();
+        }
+
+        public async Task<List<Book>> GetBooksRentedByMember(string memberUsername)
+        {
+            return await _context.BookRentals.Include(br => br.Book)
+                                            .ThenInclude(br => br.Author)
+                                            .Where(br => br.Member.UserName == memberUsername)
+                                            .Select(br => br.Book)
+                                            .ToListAsync();
+
         }
     }
 }

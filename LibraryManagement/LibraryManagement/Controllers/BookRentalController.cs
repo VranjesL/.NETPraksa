@@ -136,5 +136,26 @@ namespace LibraryManagement.Controllers
         
             return Ok("Book returned successfully");
         }
+
+        /*Napraviti funkcionalnost da vidimo u prethodnih X dana koje knjige su najviše puta iznajmljenje*/
+        [HttpGet("Most rented books in last x days")]
+        public async Task<IActionResult> GetMostRentedBooksInLastXDays([FromQuery] int lastXDays = 5)
+        {
+            var rentedBooks = await _bookRentalRepo.GetMostRentedBooksInLastXDays(lastXDays);
+
+            if(rentedBooks == null || !rentedBooks.Any()) return NotFound("No books have been rented in last ${lastXDays} days");
+
+            return Ok(rentedBooks.Select(b => b.ToBookDto()));
+        }
+
+        [HttpGet("Rented books by member")]
+        public async Task<IActionResult> GetBooksRentedByMember([FromQuery] string memberUsername)
+        {
+            var rentedBooks = await _bookRentalRepo.GetBooksRentedByMember(memberUsername);
+
+            if(rentedBooks == null || !rentedBooks.Any()) return NotFound("No books have been rented by this member");
+
+            return Ok(rentedBooks.Select(b => b.ToBookDto()));
+        }
     }
 }
