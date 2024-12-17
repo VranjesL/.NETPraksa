@@ -30,7 +30,7 @@ namespace LibraryManagement.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = "UserOnly")]
         // this function needs refactoring
         public async Task<IActionResult> BorrowBook(string bookName)
         {
@@ -92,7 +92,7 @@ namespace LibraryManagement.Controllers
         }
 
         [HttpDelete]
-        [Authorize]
+        [Authorize(Policy = "UserOnly")]
         public async Task<IActionResult> ReturnBook(string bookName)
         {   
             var username = User.Identity?.Name;
@@ -139,6 +139,7 @@ namespace LibraryManagement.Controllers
 
         /*Napraviti funkcionalnost da vidimo u prethodnih X dana koje knjige su najviše puta iznajmljenje*/
         [HttpGet("Most rented books in last x days")]
+        [Authorize(Policy = "AdminOrUser")]
         public async Task<IActionResult> GetMostRentedBooksInLastXDays([FromQuery] int lastXDays = 5)
         {
             var rentedBooks = await _bookRentalRepo.GetMostRentedBooksInLastXDays(lastXDays);

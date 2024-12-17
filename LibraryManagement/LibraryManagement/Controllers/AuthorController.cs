@@ -22,7 +22,7 @@ namespace LibraryManagement.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Policy = "AdminOrUser")]
         public async Task<IActionResult> GetAll()
         {   
             if(!ModelState.IsValid) return BadRequest(ModelState);
@@ -36,7 +36,7 @@ namespace LibraryManagement.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        [Authorize]
+        [Authorize(Policy = "AdminOrUser")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {   
             if(!ModelState.IsValid) return BadRequest(ModelState);
@@ -49,7 +49,7 @@ namespace LibraryManagement.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Create([FromBody] CreateAuthorRequestDto authorDto)
         {   
             if(!ModelState.IsValid) return BadRequest(ModelState);
@@ -62,7 +62,7 @@ namespace LibraryManagement.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
-        [Authorize]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);
@@ -76,7 +76,7 @@ namespace LibraryManagement.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
-        [Authorize]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Update([FromRoute] int id, UpdateAuthorRequestDto authorDto)
         {   
             if(!ModelState.IsValid) return BadRequest(ModelState);

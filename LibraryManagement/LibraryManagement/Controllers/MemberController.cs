@@ -6,6 +6,7 @@ using LibraryManagement.DTOs;
 using LibraryManagement.Interfaces;
 using LibraryManagement.Mappers;
 using LibraryManagement.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -70,10 +71,13 @@ namespace LibraryManagement.Controllers
                 // createAsync returns an object that is going to have properties that allows to check
                 var createdMember = await _memberManager.CreateAsync(member, registerDto.Password);
 
+                var roles = await _memberManager.GetRolesAsync(member);
+
                 if(createdMember.Succeeded)
                 {
                     // similar to createasync but its for roles
                     var roleResult = await _memberManager.AddToRoleAsync(member, "User");
+
                     if(roleResult.Succeeded)
                     {
                         return Ok(
@@ -100,6 +104,7 @@ namespace LibraryManagement.Controllers
         }
 
         [HttpGet("Members with most books borrowed throughout history")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> GetTopBorrowers([FromQuery] int top = 5, [FromQuery] bool showAllTime = true)
         {
             var topBorrowers = await _memberRepo.GetTopBorrowersAsync(top, showAllTime);
